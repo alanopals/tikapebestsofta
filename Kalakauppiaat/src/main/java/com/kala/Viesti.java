@@ -7,13 +7,16 @@ public class Viesti {
     private final int id;
     private final String nimimerkki;
     private final String sisalto;
-    private final Timestamp timestamp;
+    private Timestamp aika;
 
     public Viesti(int id, String nimimerkki, String sisalto) {
         this.id = id;
         this.nimimerkki = nimimerkki;
-        this.sisalto = sisalto;
-        this.timestamp = new Timestamp(new java.util.Date().getTime());        
+        this.sisalto = sisalto;        
+    }
+    
+    public void setAika() {
+        this.aika = new Timestamp(new java.util.Date().getTime());
     }
 
     public int getId() {
@@ -28,8 +31,8 @@ public class Viesti {
         return sisalto;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getAika() {
+        return aika;
     }
 
 }

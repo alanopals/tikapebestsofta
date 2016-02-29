@@ -15,7 +15,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
     public Viesti findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Peli WHERE id = ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE id = ?");
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -26,10 +26,11 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         }
 
         int id = rs.getInt("id");
-        String otsikko = rs.getString("otsikko");
-        int genre_id = rs.getInt("genre_id");
+        String nimimerkki = rs.getString("nimimerkki");
+        String sisalto = rs.getString("sisalto");
+        Timestamp aika = rs.getTimestamp("aika");
 
-        Viesti v = new Viesti(id, otsikko, genre_id);
+        Viesti v = new Viesti(id, nimimerkki, sisalto);
 
         rs.close();
         stmt.close();
@@ -42,31 +43,32 @@ public class ViestiDao implements Dao<Viesti, Integer> {
     public List<Viesti> findAll() throws SQLException {
         Connection connection = database.getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Peli");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti");
 
         ResultSet rs = stmt.executeQuery();
 
-        List<Peli> pelit = new ArrayList<>();
+        List<Viesti> viestit = new ArrayList<>();
 
         while (rs.next()) {
             int id = rs.getInt("id");
-            String otsikko = rs.getString("otsikko");
-            int genre_id = rs.getInt("genre_id");
+            String nimimerkki = rs.getString("nimimerkki");
+            String sisalto = rs.getString("sisalto");
+            Timestamp aika = rs.getTimestamp("aika");
 
-            Peli p = new Peli(id, otsikko, genre_id);
-            pelit.add(p);
+            Viesti v = new Viesti(id, nimimerkki, sisalto);
+            viestit.add(v);
 
         }
-
         rs.close();
         stmt.close();
         connection.close();
 
-        return pelit;
+        return viestit;
     }
 
     @Override
     public void delete(Integer key) throws SQLException {
         // ei toteutettu
     }
+
 }
