@@ -1,23 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.kala;
 
 import java.util.*;
 import java.sql.*;
 
-public class PeliDao implements Dao<Peli, Integer> {
+public class ViestiDao implements Dao<Viesti, Integer> {
 
     private Database database;
 
-    public PeliDao(Database database) {
+    public ViestiDao(Database database) {
         this.database = database;
     }
 
     @Override
-    public Peli findOne(Integer key) throws SQLException {
+    public Viesti findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
 
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Peli WHERE id = ?");
@@ -34,17 +29,17 @@ public class PeliDao implements Dao<Peli, Integer> {
         String otsikko = rs.getString("otsikko");
         int genre_id = rs.getInt("genre_id");
 
-        Peli p = new Peli(id, otsikko, genre_id);
+        Viesti v = new Viesti(id, otsikko, genre_id);
 
         rs.close();
         stmt.close();
         connection.close();
 
-        return p;
+        return v;
     }
 
     @Override
-    public List<Peli> findAll() throws SQLException {
+    public List<Viesti> findAll() throws SQLException {
         Connection connection = database.getConnection();
 
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Peli");
