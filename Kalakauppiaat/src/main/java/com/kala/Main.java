@@ -6,6 +6,7 @@ import static spark.Spark.get;
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        
         Database database = new Database("kalakauppiaat.db");
 
         ViestiDao vd = new ViestiDao(database);
