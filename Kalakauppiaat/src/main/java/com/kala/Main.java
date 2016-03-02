@@ -2,12 +2,22 @@ package com.kala;
 
 import java.util.List;
 import static spark.Spark.get;
+import static spark.Spark.port;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        
-        Database database = new Database("kalakauppiaat.db");
+
+        if (System.getenv("PORT") != null) {
+            port(Integer.valueOf(System.getenv("PORT")));
+        }
+
+        String jdbcOsoite = "jdbc:sqlite:kalakauppiaat.db";
+        if (System.getenv("DATABASE_URL") != null) {
+            jdbcOsoite = System.getenv("DATABASE_URL");
+        }
+
+        Database database = new Database(jdbcOsoite);
 
         ViestiDao vd = new ViestiDao(database);
 
