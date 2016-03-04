@@ -16,7 +16,7 @@ public class KetjuDao implements Dao<Ketju, Integer> {
         this.database = database;
     }
 
-    @Override 
+    @Override
     public Ketju findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
 
@@ -31,12 +31,12 @@ public class KetjuDao implements Dao<Ketju, Integer> {
         }
 
         int id = rs.getInt("id");
+        int palsta_id = rs.getInt("palsta_id");
         String nimimerkki = rs.getString("nimimerkki");
         String otsikko = rs.getString("otsikko");
-        String sisalto = rs.getString("sisalto");
         Timestamp aika = rs.getTimestamp("aika");
 
-        Ketju k = new Ketju(id, nimimerkki, otsikko, sisalto);
+        Ketju k = new Ketju(id, palsta_id, nimimerkki, otsikko);
 
         rs.close();
         stmt.close();
@@ -47,6 +47,7 @@ public class KetjuDao implements Dao<Ketju, Integer> {
 
     @Override
     public List<Ketju> findAll() throws SQLException {
+        
         Connection connection = database.getConnection();
 
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Ketju");
@@ -56,16 +57,18 @@ public class KetjuDao implements Dao<Ketju, Integer> {
         List<Ketju> ketjut = new ArrayList<>();
 
         while (rs.next()) {
+            
             int id = rs.getInt("id");
+            int palsta_id = rs.getInt("palsta_id");
             String nimimerkki = rs.getString("nimimerkki");
-            String sisalto = rs.getString("sisalto");
             String otsikko = rs.getString("otsikko");
             Timestamp aika = rs.getTimestamp("aika");
 
-            Ketju k = new Ketju(id, nimimerkki, otsikko, sisalto);
+            Ketju k = new Ketju(id, palsta_id, nimimerkki, otsikko);
             ketjut.add(k);
 
         }
+        
         rs.close();
         stmt.close();
         connection.close();

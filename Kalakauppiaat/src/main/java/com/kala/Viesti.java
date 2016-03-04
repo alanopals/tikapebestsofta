@@ -5,12 +5,14 @@ import java.sql.Timestamp;
 public class Viesti {
 
     private final int id;
+    private final int ketju_id;
     private final String nimimerkki;
     private final String sisalto;
     private Timestamp aika;
 
-    public Viesti(int id, String nimimerkki, String sisalto) {
+    public Viesti(int id, int ketju_id, String nimimerkki, String sisalto) {
         this.id = id;
+        this.ketju_id = ketju_id;
         this.nimimerkki = nimimerkki;
         this.sisalto = sisalto;        
     }

@@ -26,11 +26,12 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         }
 
         int id = rs.getInt("id");
+        int ketju_id = rs.getInt("ketju_id");
         String nimimerkki = rs.getString("nimimerkki");
         String sisalto = rs.getString("sisalto");
         Timestamp aika = rs.getTimestamp("aika");
 
-        Viesti v = new Viesti(id, nimimerkki, sisalto);
+        Viesti v = new Viesti(id, ketju_id, nimimerkki, sisalto);
 
         rs.close();
         stmt.close();
@@ -50,15 +51,17 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         List<Viesti> viestit = new ArrayList<>();
 
         while (rs.next()) {
+
             int id = rs.getInt("id");
+            int ketju_id = rs.getInt("ketju_id");
             String nimimerkki = rs.getString("nimimerkki");
             String sisalto = rs.getString("sisalto");
             Timestamp aika = rs.getTimestamp("aika");
 
-            Viesti v = new Viesti(id, nimimerkki, sisalto);
-            viestit.add(v);
+            Viesti v = new Viesti(id, ketju_id, nimimerkki, sisalto);
 
         }
+        
         rs.close();
         stmt.close();
         connection.close();
