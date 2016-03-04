@@ -8,6 +8,8 @@ public interface Dao<T, K> {
     T findOne(K key) throws SQLException;
 
     List<T> findAll() throws SQLException;
+    
+    void add(T type) throws SQLException;
 
     void delete(K key) throws SQLException;
 }
