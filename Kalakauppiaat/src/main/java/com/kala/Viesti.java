@@ -1,28 +1,27 @@
 package com.kala;
 
-import java.sql.Timestamp;
-
 public class Viesti {
-
+    
     private final int id;
     private final int ketju_id;
     private final String nimimerkki;
     private final String sisalto;
-    private Timestamp aika;
+    private final String aika;
 
-    public Viesti(int id, int ketju_id, String nimimerkki, String sisalto) {
+    public Viesti(int id, int ketjuId, String nimimerkki, String sisalto, String aika) {
         this.id = id;
-        this.ketju_id = ketju_id;
+        this.ketju_id = ketjuId;
         this.nimimerkki = nimimerkki;
-        this.sisalto = sisalto;        
-    }
-    
-    public void setAika() {
-        this.aika = new Timestamp(new java.util.Date().getTime());
+        this.sisalto = sisalto;
+        this.aika = aika;
     }
 
     public int getId() {
         return id;
+    }
+
+    public int getKetju_id() {
+        return ketju_id;
     }
 
     public String getNimimerkki() {
@@ -33,8 +32,7 @@ public class Viesti {
         return sisalto;
     }
 
-    public Timestamp getAika() {
+    public String getAika() {
         return aika;
     }
-
 }
