@@ -1,14 +1,14 @@
 package com.kala;
 
 public class Ketju {
-    
+
     private final int id;
-    private final int palstaId;
+    private final int palsta_id;
     private final String otsikko;
 
-    public Ketju(int id, int palstaId, String otsikko) {
+    public Ketju(int id, int palsta_id, String otsikko) {
         this.id = id;
-        this.palstaId = palstaId;
+        this.palsta_id = palsta_id;
         this.otsikko = otsikko;
     }
 
@@ -16,8 +16,8 @@ public class Ketju {
         return id;
     }
 
-    public int getPalstaId() {
-        return palstaId;
+    public int getPalsta_id() {
+        return palsta_id;
     }
 
     public String getOtsikko() {
