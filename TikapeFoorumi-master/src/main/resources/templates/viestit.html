@@ -1,0 +1,62 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Foorumi</title>
+        <meta charset="utf-8" />
+        <style>
+            table{
+                width: 100%;    
+            }
+            th, td {
+                padding: 5px;
+                text-align: left;
+                width: 20%;
+                vertical-align: top
+            }
+            tr:nth-child(even) {background-color: #f2f2f2}
+            span{
+                padding: 5px;
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+        
+        <a href="./" th:text="Etusivu"></a>
+        <br/>
+        
+        <b>
+            <span th:text="'Alue: ' + ${alue.nimi} + ' -> ' + ${ketju.otsikko}">Alue + ketju</span>
+        </b>
+        <table>
+
+            <tr th:each="viesti: ${viestit}">
+                <td th:text="${viesti.nimim} + ':'" style="text-align:right; padding-right: 2em;">nimimerkki</td>
+                <td th:text="${viesti.viesti}" style="text-align:justify; width: 60%">viesti</td>
+                <td th:text="${viesti.pvm}" style="text-align:center;">pvm</td>
+            </tr>
+
+        </table>
+
+        <br/>
+        
+        Sivut:
+        <span th:each="sivunro: ${sivut}"><a th:href="@{'~/ketju?id=' + ${ketju.id} + '&amp;sivu=' + ${sivunro}}" th:text='${sivunro}'></a> </span>
+        
+        <br/>
+        <br/>
+
+        <form method="POST" th:action="'/ketju?ketjuId=' + ${ketju.id}">
+            Uusi viesti:<br/>
+            <textarea name="viesti" style="width: 60%; height: 10em"/><br/>
+            Nimimerkki:<br/>
+            <input type="text" name="nimim"/><br/>
+            <input type="submit" value="Lähetä"/>
+
+        </form>
+
+    </body>
+</html>
