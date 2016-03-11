@@ -3,11 +3,11 @@ package com.kala;
 import java.sql.*;
 import java.util.*;
 
-public class ViestiDao implements Dao<Viesti, Integer> {
+public class PalstaDao implements Dao<Viesti, Integer> {
     
     private Database database;
     
-    public ViestiDao(Database database) throws Exception {
+    public PalstaDao(Database database) throws Exception {
         this.database = database;
     }
     

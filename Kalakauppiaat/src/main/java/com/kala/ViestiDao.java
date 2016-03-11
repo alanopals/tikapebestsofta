@@ -83,4 +83,19 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         connection.close();
     }
     
+    public int countAllIn(int ketju_id) throws SQLException{
+        Connection connection = database.getConnection();
+        
+        PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM Viesti WHERE ketju_id = ?");
+        stmt.setInt(1, ketju_id);
+        
+        ResultSet rs = stmt.executeQuery();
+        int viestit = rs.getInt("COUNT(*)");
+        
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return viestit;
+    }
 }

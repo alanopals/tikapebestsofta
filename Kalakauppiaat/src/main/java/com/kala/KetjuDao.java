@@ -85,7 +85,7 @@ public class KetjuDao implements Dao<Ketju, Integer> {
     }
 
     @Override
-    public void add(Ketju type) throws SQLException {
+    public void add(Ketju k) throws SQLException {
         Connection connection = database.getConnection();
 
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Ketju (palsta_id, otsikko) VALUES(?, ?)");
