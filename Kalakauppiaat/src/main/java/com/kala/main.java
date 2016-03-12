@@ -16,10 +16,9 @@ public class main {
     
     public static void main(String[] args) throws Exception {
         
-        // heroku
-        /*if (System.getenv("PORT") != null) {
+        if (System.getenv("PORT") != null) {
             port(Integer.valueOf(System.getenv("PORT")));
-        }*/
+        }
         
         Database database = new Database("jdbc:sqlite:kalakauppiaat.db");
         
@@ -56,7 +55,7 @@ public class main {
             
             List<Integer> sivut = new ArrayList<>();
             
-            for (int i = 0; i <= pDao.getKoko2(palsta_id) / 10; i++) {
+            for (int i = 0; i <= (pDao.getKoko2(palsta_id) - 1) / 10; i++) {
                 sivut.add(i + 1);
             }
             
@@ -96,7 +95,7 @@ public class main {
             
             List<Integer> sivut = new ArrayList<>();
             
-            for (int i = 0; i <= kDao.getKoko(ketju_id) / 10; i++) {
+            for (int i = 0; i <= (kDao.getKoko(ketju_id) - 1) / 10; i++) {
                 sivut.add(i + 1);
             }
             
@@ -122,8 +121,10 @@ public class main {
                 return null;
             }
             
+            int viimeisin = kDao.getKoko(ketju_id) / 10 + 1;
+            
             vDao.add(new Viesti(ketju_id, nimimerkki, sisalto));
-            res.redirect("./ketju?id=" + ketju_id + "&sivu=" + String.valueOf(kDao.getKoko(ketju_id) / 10 + 1));
+            res.redirect("./ketju?id=" + ketju_id + "&sivu=" + String.valueOf(viimeisin));
             
             return null;
         });

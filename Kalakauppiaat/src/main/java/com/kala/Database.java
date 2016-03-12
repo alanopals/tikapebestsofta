@@ -7,85 +7,79 @@ import java.net.*;
 public class Database {
 
     private String databaseAddress;
-
+    
     public Database(String databaseAddress) throws Exception {
         this.databaseAddress = databaseAddress;
-
+        
         init();
     }
-
+    
     private void init() {
-        List<String> lauseet = null;
+        List<String> queries = null;
+        
         if (this.databaseAddress.contains("postgres")) {
-            lauseet = postgreLauseet();
+            queries = postgreInit();
         } else {
-            lauseet = sqliteLauseet();
+            queries = sqliteInit();
         }
-
-        // "try with resources" sulkee resurssin automaattisesti lopuksi
-        try (Connection conn = getConnection()) {
-            Statement st = conn.createStatement();
-
-            // suoritetaan komennot
-            for (String lause : lauseet) {
-                System.out.println("Running command >> " + lause);
-                st.executeUpdate(lause);
+        
+        try (Connection connection = getConnection()) {
+            Statement stmt = connection.createStatement();
+            
+            for (String query : queries) {
+                stmt.executeUpdate(query);
             }
-
         } catch (Throwable t) {
-            // jos tietokantataulu on jo olemassa, ei komentoja suoriteta
-            System.out.println("Error >> " + t.getMessage());
+            System.out.println(t.getMessage());
         }
     }
-
+    
     public Connection getConnection() throws SQLException {
         if (this.databaseAddress.contains("postgres")) {
             try {
                 URI dbUri = new URI(databaseAddress);
-
+                
                 String username = dbUri.getUserInfo().split(":")[0];
                 String password = dbUri.getUserInfo().split(":")[1];
                 String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
-
+                
                 return DriverManager.getConnection(dbUrl, username, password);
             } catch (Throwable t) {
-                System.out.println("Error: " + t.getMessage());
+                System.out.println(t.getMessage());
                 t.printStackTrace();
             }
         }
-
+        
         return DriverManager.getConnection(databaseAddress);
     }
-
-    private List<String> postgreLauseet() {
-        ArrayList<String> lista = new ArrayList<>();
-
-        // tietokantataulujen luomiseen tarvittavat komennot suoritusjärjestyksessä
-        lista.add("DROP TABLE Palsta;");
-        lista.add("DROP TABLE Ketju;");
-        lista.add("DROP TABLE Viesti;");
-        // heroku käyttää SERIAL-avainsanaa uuden tunnuksen automaattiseen luomiseen
-        lista.add("CREATE TABLE Palsta (id SERIAL PRIMARY KEY, kuvaus varchar(40) NOT NULL);");
-        lista.add("INSERT INTO Palsta (kuvaus) VALUES ('postgresql-palsta');");
-        lista.add("CREATE TABLE Ketju (id SERIAL PRIMARY KEY, palsta_id INTEGER NOT NULL, otsikko VARCHAR(40) NOT NULL);");
-        lista.add("INSERT INTO Ketju (palsta_id, otsikko) VALUES ('postgresql-ketju');");
-        lista.add("CREATE TABLE Viesti (id SERIAL PRIMARY KEY, ketju_id INTEGER NOT NULL, nimimerkki VARCHAR(20) NOT NULL, sisalto VARCHAR(140) NOT NULL, aika DATETIME NOT NULL);");
-        lista.add("INSERT INTO Viesti (ketju_id, nimimerkki, sisalto, aika) VALUES ('postgresql-viesti');");
-
-        return lista;
+    
+    private List<String> postgreInit() {
+        ArrayList<String> queries = new ArrayList<>();
+        
+        queries.add("DROP TABLE Palsta;");
+        queries.add("DROP TABLE Ketju;");
+        queries.add("DROP TABLE Viesti;");
+        
+        queries.add("CREATE TABLE Palsta (id SERIAL PRIMARY KEY, kuvaus varchar(40) NOT NULL);");
+        queries.add("INSERT INTO Palsta (kuvaus) VALUES ('postgresql-palsta');");
+        queries.add("CREATE TABLE Ketju (id SERIAL PRIMARY KEY, palsta_id INTEGER NOT NULL, otsikko VARCHAR(40) NOT NULL);");
+        queries.add("INSERT INTO Ketju (palsta_id, otsikko) VALUES ('postgresql-ketju');");
+        queries.add("CREATE TABLE Viesti (id SERIAL PRIMARY KEY, ketju_id INTEGER NOT NULL, nimimerkki VARCHAR(20) NOT NULL, sisalto VARCHAR(140) NOT NULL, aika DATETIME NOT NULL);");
+        queries.add("INSERT INTO Viesti (ketju_id, nimimerkki, sisalto, aika) VALUES ('postgresql-viesti');");
+        
+        return queries;
     }
-
-    private List<String> sqliteLauseet() {
-        ArrayList<String> lista = new ArrayList<>();
-
-        // tietokantataulujen luomiseen tarvittavat komennot suoritusjärjestyksessä
-        lista.add("CREATE TABLE Palsta (id SERIAL PRIMARY KEY, kuvaus varchar(40) NOT NULL);");
-        lista.add("INSERT INTO Palsta (kuvaus) VALUES ('sqlite-palsta');");
-        lista.add("CREATE TABLE Ketju (id SERIAL PRIMARY KEY, palsta_id INTEGER NOT NULL, otsikko VARCHAR(40) NOT NULL);");
-        lista.add("INSERT INTO Ketju (palsta_id, otsikko) VALUES ('sqlite-ketju');");
-        lista.add("CREATE TABLE Viesti (id SERIAL PRIMARY KEY, ketju_id INTEGER NOT NULL, nimimerkki VARCHAR(20) NOT NULL, sisalto VARCHAR(140) NOT NULL, aika DATETIME NOT NULL);");
-        lista.add("INSERT INTO Viesti (ketju_id, nimimerkki, sisalto, aika) VALUES ('sqlite-viesti');");
-
-        return lista;
+    
+    private List<String> sqliteInit() {
+        ArrayList<String> queries = new ArrayList<>();
+        
+        queries.add("CREATE TABLE Palsta (id SERIAL PRIMARY KEY, kuvaus varchar(40) NOT NULL);");
+        queries.add("INSERT INTO Palsta (kuvaus) VALUES ('sqlite-palsta');");
+        queries.add("CREATE TABLE Ketju (id SERIAL PRIMARY KEY, palsta_id INTEGER NOT NULL, otsikko VARCHAR(40) NOT NULL);");
+        queries.add("INSERT INTO Ketju (palsta_id, otsikko) VALUES ('sqlite-ketju');");
+        queries.add("CREATE TABLE Viesti (id SERIAL PRIMARY KEY, ketju_id INTEGER NOT NULL, nimimerkki VARCHAR(20) NOT NULL, sisalto VARCHAR(140) NOT NULL, aika DATETIME NOT NULL);");
+        queries.add("INSERT INTO Viesti (ketju_id, nimimerkki, sisalto, aika) VALUES ('sqlite-viesti');");
+        
+        return queries;
     }
 }
