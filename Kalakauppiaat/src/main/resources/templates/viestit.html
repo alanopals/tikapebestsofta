@@ -16,7 +16,7 @@
     <br />
     <table>
       <tr th:each="viesti : ${viestit}">
-        <td><span th:text="|${viesti.nimimerkki} (${viesti.aika}):&lt;br /&gt;${viesti.sisalto}|"></span></td>
+        <td><span th:inline="text">[[|${viesti.nimimerkki} (${viesti.aika}):|]]<br />[[${viesti.sisalto}]]</span></td>
       </tr>
     </table>
     <br />
