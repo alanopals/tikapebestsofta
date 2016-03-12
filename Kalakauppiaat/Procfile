@@ -1,1 +1,1 @@
-web:    java -cp target/classes:target/dependency/* foorumi.main
+web:    java -cp target/classes:target/dependency/* com.kala.main
