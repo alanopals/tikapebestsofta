@@ -18,14 +18,14 @@
     <span>Kuha selailee: </span><span th:each="sivu : ${sivut}"><a th:href="@{~/palsta(id=${palsta.id},sivu=${sivu})}" th:text="${sivu}">sivu</a> </span><br />
     <br />
     <form method="POST" th:action="|/palsta?id=${palsta.id}&amp;sivu=1|">
-      <span>Luo uusi ketju:</span><br />
+      <span>Kuha jatkaa palstaa:</span><br />
       <br />
-      <input type="text" name="nimimerkki" value="Nimimerkki" /><br />
+      <input type="text" name="nimimerkki" value="Anonyymi Ahven" /><br />
       <br />
-      <input type="text" name="otsikko" value="Otsikko" /><br />
-      <textarea name="sisalto">Sisältö</textarea><br/>
+      <input type="text" name="otsikko" value="Kalakauppiaan läpimurto!" /><br />
+      <textarea name="sisalto">Kalakauppiaan mietteitä...</textarea><br/>
       <br />
-      <input type="submit" value="Lähetä" />
+      <input type="submit" value="Kalasta minut!" />
     </form>
   </body>
 </html>

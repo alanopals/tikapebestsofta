@@ -15,21 +15,21 @@
     <a th:href="|/palsta?id=${palsta.id}&amp;sivu=1|">Kuha palaa takas...</a><br />
     <br />
     <table>
-      <tr th:each="viesti : ${viestit}">
-        <td><span th:inline="text">[[|${viesti.nimimerkki} (${viesti.aika}):|]]<br />[[${viesti.sisalto}]]</span></td>
+      <tr th:each="viesti,i : ${viestit}">
+        <td><span th:inline="text"><b>[[|${i.count}.|]]</b> [[|${viesti.nimimerkki} (${viesti.aika}):|]]<br />[[${viesti.sisalto}]]</span></td>
       </tr>
     </table>
     <br />
     <span>Kuha selailee: </span><span th:each="sivu : ${sivut}"><a th:href="@{~/ketju(id=${ketju.id},sivu=${sivu})}" th:text="${sivu}">sivu</a> </span><br />
     <br />
     <form method="POST" th:action="|/ketju?id=${ketju.id}&amp;sivu=1|">
-      <span>Luo uusi viesti:</span><br />
+      <span>Kuha jatkaa ketjua:</span><br />
       <br />
-      <input type="text" name="nimimerkki" value="Nimimerkki" /><br />
+      <input type="text" name="nimimerkki" value="Anonyymi Ahven" /><br />
       <br />
-      <textarea name="sisalto">Sisältö</textarea><br/>
+      <textarea name="sisalto">Kalakauppiaan mietteitä...</textarea><br/>
       <br />
-      <input type="submit" value="Lähetä" />
+      <input type="submit" value="Kalasta minut!" />
     </form>
   </body>
 </html>
