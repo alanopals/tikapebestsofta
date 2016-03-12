@@ -11,7 +11,7 @@
     <br />
     <table>
       <tr th:each="ketju : ${ketjut}">
-        <td><a th:href="@{~/ketju(id=${ketju.id},sivu=1)}" th:text="${ketju.otsikko}">ketju</a><span th:text="| (${ketju.koko} viestiä), viimeisin: ${ketju.viimeisin}|"></span></td>
+        <td><a th:href="@{~/ketju(id=${ketju.id},sivu=1)}" th:text="${ketju.otsikko}">ketju</a><span th:text="| (${ketju.koko} viestiä) - ${ketju.viimeisin}|"></span></td>
       </tr>
     </table>
     <br />

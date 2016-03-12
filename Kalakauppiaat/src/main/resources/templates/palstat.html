@@ -9,7 +9,7 @@
     <h2>Aiheella ei väliä, kuha näpyttää!</h2>
     <table>
       <tr th:each="palsta : ${palstat}">
-        <td><a th:href="@{~/palsta(id=${palsta.id},sivu=1)}" th:text="${palsta.kuvaus}">palsta</a><span th:text="| (${palsta.koko} viestiä), viimeisin: ${palsta.viimeisin}|"></span></td>
+        <td><a th:href="@{~/palsta(id=${palsta.id},sivu=1)}" th:text="${palsta.kuvaus}">palsta</a><span th:text="| (${palsta.koko} viestiä) - ${palsta.viimeisin}|"></span></td>
       </tr>
     </table>
     <br />
