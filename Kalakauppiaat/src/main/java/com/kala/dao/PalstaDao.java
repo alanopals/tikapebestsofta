@@ -19,7 +19,11 @@ public class PalstaDao implements Dao<Palsta, Integer> {
         ArrayList<Palsta> collection = new ArrayList<>();
         
         while (rs.next()) {
-            collection.add(new Palsta(rs.getInt("id"), rs.getString("kuvaus")));
+            Palsta p = new Palsta(rs.getInt("id"), rs.getString("kuvaus"));
+            p.setLkm(countViestit(p.getId()));
+            p.setAika(lastViesti(p.getId()));
+            
+            collection.add(p);
         }
         
         return collection;
@@ -39,6 +43,8 @@ public class PalstaDao implements Dao<Palsta, Integer> {
         }
         
         Palsta p = new Palsta(rs.getInt("id"), rs.getString("kuvaus"));
+        p.setLkm(countViestit(p.getId()));
+        p.setAika(lastViesti(p.getId()));
         
         rs.close();
         stmt.close();
@@ -127,7 +133,7 @@ public class PalstaDao implements Dao<Palsta, Integer> {
         ResultSet rs2 = stmt2.executeQuery();
         
         if (!rs2.next()) {
-            return "ei viestejä";
+            return "-";
         }
         
         String last = rs2.getString("viimeisin");
