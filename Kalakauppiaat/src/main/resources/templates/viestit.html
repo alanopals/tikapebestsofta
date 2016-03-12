@@ -1,62 +1,35 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
-    <head>
-        <title>Foorumi</title>
-        <meta charset="utf-8" />
-        <style>
-            table{
-                width: 100%;    
-            }
-            th, td {
-                padding: 5px;
-                text-align: left;
-                width: 20%;
-                vertical-align: top
-            }
-            tr:nth-child(even) {background-color: #f2f2f2}
-            span{
-                padding: 5px;
-            }
-
-        </style>
-
-    </head>
-
-    <body>
-        
-        <a href="./" th:text="Etusivu"></a>
-        <br/>
-        
-        <b>
-            <span th:text="'Alue: ' + ${alue.nimi} + ' -> ' + ${ketju.otsikko}">Alue + ketju</span>
-        </b>
-        <table>
-
-            <tr th:each="viesti: ${viestit}">
-                <td th:text="${viesti.nimim} + ':'" style="text-align:right; padding-right: 2em;">nimimerkki</td>
-                <td th:text="${viesti.viesti}" style="text-align:justify; width: 60%">viesti</td>
-                <td th:text="${viesti.pvm}" style="text-align:center;">pvm</td>
-            </tr>
-
-        </table>
-
-        <br/>
-        
-        Sivut:
-        <span th:each="sivunro: ${sivut}"><a th:href="@{'~/ketju?id=' + ${ketju.id} + '&amp;sivu=' + ${sivunro}}" th:text='${sivunro}'></a> </span>
-        
-        <br/>
-        <br/>
-
-        <form method="POST" th:action="'/ketju?ketjuId=' + ${ketju.id}">
-            Uusi viesti:<br/>
-            <textarea name="viesti" style="width: 60%; height: 10em"/><br/>
-            Nimimerkki:<br/>
-            <input type="text" name="nimim"/><br/>
-            <input type="submit" value="Lähetä"/>
-
-        </form>
-
-    </body>
+  <head>
+    <title>Kalakauppiaat</title>
+    <meta charset="UTF-8" />
+    <style>
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Kalakauppiaat foorumi</h1>
+    <h2 th:text="|Palsta: ${palsta.kuvaus} -> ${ketju.otsikko}|">palsta/ketju</h2>
+    <a th:href="|/palsta?id=${palsta.id}&amp;sivu=1|">Kuha palaa takas...</a><br />
+    <br />
+    <table>
+      <tr th:each="viesti : ${viestit}">
+        <td><span th:text="|${viesti.nimimerkki} (${viesti.aika}):&lt;br /&gt;${viesti.sisalto}|"></span></td>
+      </tr>
+    </table>
+    <br />
+    <span>Kuha selailee: </span><span th:each="sivu : ${sivut}"><a th:href="@{~/ketju(id=${ketju.id},sivu=${sivu})}" th:text="${sivu}">sivu</a> </span><br />
+    <br />
+    <form method="POST" th:action="|/ketju?id=${ketju.id}&amp;sivu=1|">
+      <span>Luo uusi viesti:</span><br />
+      <br />
+      <input type="text" name="nimimerkki" value="Nimimerkki" /><br />
+      <br />
+      <textarea name="sisalto">Sisältö</textarea><br/>
+      <br />
+      <input type="submit" value="Lähetä" />
+    </form>
+  </body>
 </html>

@@ -20,8 +20,8 @@ public class PalstaDao implements Dao<Palsta, Integer> {
         
         while (rs.next()) {
             Palsta p = new Palsta(rs.getInt("id"), rs.getString("kuvaus"));
-            p.setLkm(countViestit(p.getId()));
-            p.setAika(lastViesti(p.getId()));
+            p.setKoko(getKoko(p.getId()));
+            p.setViimeisin(getViimeisin(p.getId()));
             
             collection.add(p);
         }
@@ -43,8 +43,8 @@ public class PalstaDao implements Dao<Palsta, Integer> {
         }
         
         Palsta p = new Palsta(rs.getInt("id"), rs.getString("kuvaus"));
-        p.setLkm(countViestit(p.getId()));
-        p.setAika(lastViesti(p.getId()));
+        p.setKoko(getKoko(p.getId()));
+        p.setViimeisin(getViimeisin(p.getId()));
         
         rs.close();
         stmt.close();
@@ -101,10 +101,10 @@ public class PalstaDao implements Dao<Palsta, Integer> {
         connection.close();
     }
     
-    public int countViestit(Integer palsta_id) throws SQLException {
+    public int getKoko(Integer palsta_id) throws SQLException {
         Connection connection1 = database.getConnection();
         
-        PreparedStatement stmt1 = connection1.prepareStatement("SELECT COUNT(*) AS lkm FROM Ketju, Viesti "
+        PreparedStatement stmt1 = connection1.prepareStatement("SELECT COUNT(*) AS koko FROM Ketju, Viesti "
                 + "WHERE Viesti.ketju_id = Ketju.id AND Ketju.palsta_id = ?");
         stmt1.setInt(1, palsta_id);
         
@@ -114,34 +114,56 @@ public class PalstaDao implements Dao<Palsta, Integer> {
             return 0;
         }
         
-        int count = rs1.getInt("lkm");
+        int size = rs1.getInt("koko");
         
         rs1.close();
         stmt1.close();
         connection1.close();
         
-        return count;
+        return size;
     }
     
-    public String lastViesti(int palsta_id) throws SQLException {
+    public int getKoko2(Integer palsta_id) throws SQLException {
         Connection connection2 = database.getConnection();
         
-        PreparedStatement stmt2 = connection2.prepareStatement("SELECT Viesti.aika AS viimeisin FROM Ketju, Viesti WHERE "
-                + "Viesti.ketju_id = Ketju.id AND Ketju.palsta_id = ? ORDER BY Viesti.aika DESC LIMIT 1");
+        PreparedStatement stmt2 = connection2.prepareStatement("SELECT COUNT(*) AS koko FROM Ketju "
+                + "WHERE Ketju.palsta_id = ?");
         stmt2.setInt(1, palsta_id);
         
         ResultSet rs2 = stmt2.executeQuery();
         
         if (!rs2.next()) {
-            return "-";
+            return 0;
         }
         
-        String last = rs2.getString("viimeisin");
+        int size = rs2.getInt("koko");
         
         rs2.close();
         stmt2.close();
         connection2.close();
         
-        return last;
+        return size;
+    }
+    
+    public String getViimeisin(int palsta_id) throws SQLException {
+        Connection connection3 = database.getConnection();
+        
+        PreparedStatement stmt3 = connection3.prepareStatement("SELECT Viesti.aika AS viimeisin FROM Ketju, Viesti WHERE "
+                + "Viesti.ketju_id = Ketju.id AND Ketju.palsta_id = ? ORDER BY Viesti.aika DESC LIMIT 1");
+        stmt3.setInt(1, palsta_id);
+        
+        ResultSet rs3 = stmt3.executeQuery();
+        
+        if (!rs3.next()) {
+            return "-";
+        }
+        
+        String latest = rs3.getString("viimeisin");
+        
+        rs3.close();
+        stmt3.close();
+        connection3.close();
+        
+        return latest;
     }
 }

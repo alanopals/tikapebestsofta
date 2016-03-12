@@ -40,7 +40,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         Connection connection = database.getConnection();
         
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE ketju_id = ? "
-                + "DESC LIMIT 10 OFFSET ?");
+                + "ORDER BY Viesti.aika ASC LIMIT 10 OFFSET ?");
         stmt.setInt(1, ketju_id);
         stmt.setInt(2, (sivu - 1) * 10);
         

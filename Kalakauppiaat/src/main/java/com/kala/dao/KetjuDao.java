@@ -19,7 +19,11 @@ public class KetjuDao implements Dao<Ketju, Integer> {
         ArrayList<Ketju> collection = new ArrayList<>();
         
         while (rs.next()) {
-            collection.add(new Ketju(rs.getInt("id"), rs.getInt("palsta_id"), rs.getString("otsikko")));
+            Ketju k = new Ketju(rs.getInt("id"), rs.getInt("palsta_id"), rs.getString("otsikko"));
+            k.setKoko(getKoko(k.getId()));
+            k.setViimeisin(getViimeisin(k.getId()));
+            
+            collection.add(k);
         }
         
         return collection;
@@ -28,9 +32,14 @@ public class KetjuDao implements Dao<Ketju, Integer> {
     @Override
     public Ketju findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
+        PreparedStatement stmt;
         
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Ketju WHERE id = ?");
-        stmt.setInt(1, key);
+        if (key == -1) {
+            stmt = connection.prepareStatement("SELECT * FROM Ketju ORDER BY id DESC LIMIT 1");
+        } else {
+            stmt = connection.prepareStatement("SELECT * FROM Ketju WHERE id = ?");
+            stmt.setInt(1, key);
+        }
         
         ResultSet rs = stmt.executeQuery();
         
@@ -39,6 +48,8 @@ public class KetjuDao implements Dao<Ketju, Integer> {
         }
         
         Ketju k = new Ketju(rs.getInt("id"), rs.getInt("palsta_id"), rs.getString("otsikko"));
+        k.setKoko(getKoko(k.getId()));
+        k.setViimeisin(getViimeisin(k.getId()));
         
         rs.close();
         stmt.close();
@@ -105,10 +116,10 @@ public class KetjuDao implements Dao<Ketju, Integer> {
         connection.close();
     }
     
-    public int countViestit(Integer palsta_id) throws SQLException {
+    public int getKoko(Integer palsta_id) throws SQLException {
         Connection connection1 = database.getConnection();
         
-        PreparedStatement stmt1 = connection1.prepareStatement("SELECT COUNT(*) AS lkm FROM Viesti "
+        PreparedStatement stmt1 = connection1.prepareStatement("SELECT COUNT(*) AS koko FROM Viesti "
                 + "WHERE Viesti.ketju_id = ?");
         stmt1.setInt(1, palsta_id);
         
@@ -118,16 +129,16 @@ public class KetjuDao implements Dao<Ketju, Integer> {
             return 0;
         }
         
-        int count = rs1.getInt("lkm");
+        int size = rs1.getInt("koko");
         
         rs1.close();
         stmt1.close();
         connection1.close();
         
-        return count;
+        return size;
     }
     
-    public String lastViesti(int palsta_id) throws SQLException {
+    public String getViimeisin(int palsta_id) throws SQLException {
         Connection connection2 = database.getConnection();
         
         PreparedStatement stmt2 = connection2.prepareStatement("SELECT Viesti.aika AS viimeisin FROM Viesti WHERE "
@@ -137,15 +148,15 @@ public class KetjuDao implements Dao<Ketju, Integer> {
         ResultSet rs2 = stmt2.executeQuery();
         
         if (!rs2.next()) {
-            return "ei viestejä";
+            return "-";
         }
         
-        String last = rs2.getString("viimeisin");
+        String latest = rs2.getString("viimeisin");
         
         rs2.close();
         stmt2.close();
         connection2.close();
         
-        return last;
+        return latest;
     }
 }

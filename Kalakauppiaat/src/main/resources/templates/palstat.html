@@ -2,21 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
   <head>
     <title>Kalakauppiaat</title>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
   </head>
   <body>
     <h1>Kalakauppiaat foorumi</h1>
     <h2>Aiheella ei väliä, kuha näpyttää!</h2>
     <table>
-      <tr th:each="palsta,status : ${palstat}">
-        <td><a th:href="@{'~/palsta?id=' + ${palsta.id} + '&amp;sivu=1'}" th:text="|${status.count}. ${palsta.kuvaus} (${palsta.lkm} viestiä), viimeisin: ${palsta.aika}|">kuvaus</a></td>
+      <tr th:each="palsta : ${palstat}">
+        <td><a th:href="@{~/palsta(id=${palsta.id},sivu=1)}" th:text="${palsta.kuvaus}">palsta</a><span th:text="| (${palsta.koko} viestiä), viimeisin: ${palsta.viimeisin}|"></span></td>
       </tr>
     </table>
-    <br/>
+    <br />
     <form method="POST" action="/">
-      Uuden palstan nimi:<br/>
-      <input type="text" name="kuvaus"/><br/>
-      <input type="submit" value="Lisää palsta"/>
+      <span>Luo uusi palsta:</span><br />
+      <br />
+      <textarea name="kuvaus">Kuvaus</textarea><br/>
+      <br />
+      <input type="submit" value="Lähetä" />
     </form>
   </body>
 </html>
